@@ -16,6 +16,9 @@
         "@/*": [
           "src/*"
         ],
+        "@Type": [
+            "src/utils/Types.ts"
+        ],
       },
       "lib": [
         "ES6",
