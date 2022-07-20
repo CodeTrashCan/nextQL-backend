@@ -2,6 +2,7 @@ console.log("testing")
 
 import express from 'express'
 import cors from 'cors'
+import {GITHUB_TOKEN} from "./config"
 
 const app = express()
 const port = 3000
@@ -13,5 +14,5 @@ app.get('/',(req,res) => {
 })
 
 app.listen(port, () => {
-    console.log("testing")
+    console.log(GITHUB_TOKEN)
 })
