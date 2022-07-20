@@ -11,7 +11,6 @@ const port = 3000
 app.use(cors())
 
 app.get('/',(req,res) => {
-    console.log(req.query)
     res.send('Hello World!')
 })
 
@@ -46,8 +45,8 @@ app.get('/githubContirbutions/',async (req,res) => {
                 }`;
             const queryValue = {
                 "userName":"dennis0324",
-                "toDate":new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate()).toISOString(),
-                "fromDate":new Date(startDate.getFullYear(),startDate.getMonth() - 1,startDate.getDate()).toISOString()}
+                "toDate":new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()).toISOString(),
+                "fromDate":new Date(startDate.getFullYear(),startDate.getMonth() - 2,startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()).toISOString()}
             const endpoint = "https://api.github.com/graphql"
             let commitDatas = await fetch(endpoint,
             {
@@ -62,7 +61,6 @@ app.get('/githubContirbutions/',async (req,res) => {
                 })
             })
             commitDatas = await commitDatas.json()
-            console.log(commitDatas)
     res.send(commitDatas)
 })
 
