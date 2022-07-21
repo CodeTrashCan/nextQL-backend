@@ -15,7 +15,6 @@ app.get('/',(req,res) => {
 })
 
 app.get('/githubContirbutions/',async (req,res) => {
-    console.log()
     const responseQuery = req.query.startingDate as string
     const startDate = new Date(responseQuery)
     const QUERY = `
@@ -45,8 +44,9 @@ app.get('/githubContirbutions/',async (req,res) => {
                 }`;
             const queryValue = {
                 "userName":"dennis0324",
-                "toDate":new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()).toISOString(),
-                "fromDate":new Date(startDate.getFullYear(),startDate.getMonth() - 2,startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()).toISOString()}
+                "toDate":new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()),
+                "fromDate":new Date(startDate.getFullYear(),startDate.getMonth() - 2,startDate.getDate() + 1,startDate.getHours(),startDate.getMinutes(),startDate.getSeconds())
+            }
             const endpoint = "https://api.github.com/graphql"
             let commitDatas = await fetch(endpoint,
             {
