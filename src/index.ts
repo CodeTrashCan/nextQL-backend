@@ -42,25 +42,25 @@ app.get('/githubContirbutions/',async (req,res) => {
                         }
                     }
                 }`;
-            const queryValue = {
-                "userName":"dennis0324",
-                "toDate":new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()),
-                "fromDate":new Date(startDate.getFullYear(),startDate.getMonth() - 2,startDate.getDate() + 1,startDate.getHours(),startDate.getMinutes(),startDate.getSeconds())
-            }
-            const endpoint = "https://api.github.com/graphql"
-            let commitDatas = await fetch(endpoint,
-            {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                'Authorization':`bearer ${GITHUB_TOKEN}`
-                },
-                body:JSON.stringify({
-                query:QUERY,
-                variables: queryValue
-                })
-            })
-            commitDatas = await commitDatas.json()
+    const queryValue = {
+        "userName":"dennis0324",
+        "toDate":new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate(),startDate.getHours(),startDate.getMinutes(),startDate.getSeconds()),
+        "fromDate":new Date(startDate.getFullYear(),startDate.getMonth() - 2,startDate.getDate() + 1,startDate.getHours(),startDate.getMinutes(),startDate.getSeconds())
+    }
+    const endpoint = "https://api.github.com/graphql"
+    let commitDatas = await fetch(endpoint,
+    {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization':`bearer ${GITHUB_TOKEN}`
+        },
+        body:JSON.stringify({
+        query:QUERY,
+        variables: queryValue
+        })
+    })
+    commitDatas = await commitDatas.json()
     res.send(commitDatas)
 })
 
