@@ -19,6 +19,9 @@
         "@Type": [
             "src/utils/Types.ts"
         ],
+        "@Config":[
+            "src/config.ts"
+        ]
       },
       "lib": [
         "ES6",

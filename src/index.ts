@@ -4,6 +4,7 @@ import express from 'express'
 import cors from 'cors'
 import {GITHUB_TOKEN} from "./config"
 import fetch from 'cross-fetch'
+import * as github from './core/github'
 
 const app = express()
 const port = 3000
@@ -64,6 +65,26 @@ app.get('/githubContirbutions/',async (req,res) => {
     res.send(commitDatas)
 })
 
+app.get('/getPostTitles/',async(req,res) => {
+    const result = await github.getPostTitles({
+        owner:req.query.owner as string,
+        repo:req.query.repo as string,
+        path:req.query.path as string
+    })
+    res.send(result)
+})
+
 app.listen(port, () => {
     console.log(GITHUB_TOKEN)
+})
+
+app.get('/getContent/',async(req,res) => {
+    //owner:'dennis0324',repo:'blogPost',path:`${content.path}/${i.name}.md`
+    const temp = await github.getContent({
+        owner:req.query.owner as string,
+        repo:req.query.repo as string,
+        path:`${req.query.path}/${req.query.name}.md` as string
+    })
+    const contentStr =  github.decodeBase64UTF8(temp.content)
+    res.send(contentStr)
 })
