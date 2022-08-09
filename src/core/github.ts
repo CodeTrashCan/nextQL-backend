@@ -102,12 +102,12 @@ export function getBetweenDate(fromDate:Date,toDate:Date,blogPostDatas:BlogPostD
  * @param relativeUrl 데이터를 받아오는 특정 url를 기입합니다.
  * @returns 인터넷에서 사용하기 위한 request를 반환합니다.
  */
-export function githubRequest(relativeUrl: string) {
+export function githubRequest(relativeUrl: string,jsonSetting = 'application/vnd.github.v3+json') {
     const init = {} as RequestInit
     init.mode = 'cors';
     init.cache = 'no-cache'; // force conditional request
     const request = new Request('https://api.github.com/' + relativeUrl,{method: "GET" ,cache:'no-cache',mode:'cors'});
-    request.headers.set('Accept', 'application/vnd.github.v3+json');
+    request.headers.set('Accept', jsonSetting);
     request.headers.set('Authorization', `token ${GITHUB_TOKEN}`);
     return request
 }
@@ -187,6 +187,21 @@ export async function getPostName(content:{owner:string,repo:string,path:string}
  */
 export async function getContent(content:{owner:string,repo:string,path:string}):Promise<FileContentsResponse>{
     const request = githubRequest(`repos/${content.owner}/${content.repo}/contents/${content.path}?ref=main`)
+    const response = await githubFetch(request)
+    if (response.status === 404) {
+        throw new Error(`Repo "${content.owner}/${content.repo}" does not have a file named "${content.path}" in the main branch.`);
+    }
+    if (!response.ok) {
+        throw new Error(`Error fetching ${content.path}.`);
+    }
+    const file = await response.json() as FileContentsResponse
+
+    return file
+}
+
+
+export async function searchPost(content:{owner:string,repo:string,path:string},searchWord:string) {
+    const request = githubRequest(`search/code?q=${searchWord}+in:file+user:${content.owner}`,'application/vnd.github.text-match+json')
     const response = await githubFetch(request)
     if (response.status === 404) {
         throw new Error(`Repo "${content.owner}/${content.repo}" does not have a file named "${content.path}" in the main branch.`);

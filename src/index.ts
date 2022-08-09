@@ -88,3 +88,14 @@ app.get('/getContent/',async(req,res) => {
     const contentStr =  github.decodeBase64UTF8(temp.content)
     res.send(contentStr)
 })
+
+app.get('/searchPost/',async(req,res) => {
+    //owner:'dennis0324',repo:'blogPost',path:`${content.path}/${i.name}.md`
+    const temp = await github.searchPost({
+        owner:req.query.owner as string,
+        repo:req.query.repo as string,
+        path:req.query.path as string
+    },req.query.title as string)
+    // const contentStr =  github.decodeBase64UTF8(temp.content)
+    res.send(temp)
+})
