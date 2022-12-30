@@ -59,8 +59,15 @@ import fetch, { Request } from 'cross-fetch'
             dateArr.push(value.node.committedDate)
         })
         blogPostData.name = key[0]
-        blogPostData.createdat = dateArr[dateArr.length - 1]
-        blogPostData.updatedat = dateArr[0]
+        // 깃허브 포스트의 업로드 날짜는 UTC 기준으로 되어있어서 받아올 떄 KST 혹은 그 나라 기준으로 변경 해준다.
+        const createAtDate = new Date(dateArr[dateArr.length - 1])
+        const updateAtDate = new Date(dateArr[0])
+        const UTCDiff = createAtDate.getHours() - createAtDate.getUTCHours()
+        createAtDate.setHours(createAtDate.getHours() - UTCDiff)
+        updateAtDate.setHours(updateAtDate.getHours() - UTCDiff)
+
+        blogPostData.createdat = createAtDate.toISOString()
+        blogPostData.updatedat = updateAtDate.toISOString()
         blogPostDatas.push(blogPostData)
     })
     blogPostDatas.sort((a,b) => b.updatedat.localeCompare(a.updatedat))
