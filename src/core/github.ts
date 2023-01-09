@@ -15,7 +15,6 @@ import fetch, { Request } from 'cross-fetch'
  */
  export async function getPostTitles(content:{owner:string,repo:string,path:string}) : Promise<BlogPostData[]>{
     /** 깃허브에서 파일 이름을 가지고 옵니다. */
-    // const query = await getQuery({owner:content.owner,repo:content.repo,path:content.path})
     const fileDate = await getPostName({owner:content.owner,repo:content.repo,path:content.path})
 
     /** 커밋 기록을 가지고 오는 형식을 만들어주는 틀입니다. */
@@ -62,9 +61,8 @@ import fetch, { Request } from 'cross-fetch'
         // 깃허브 포스트의 업로드 날짜는 UTC 기준으로 되어있어서 받아올 떄 KST 혹은 그 나라 기준으로 변경 해준다.
         const createAtDate = new Date(dateArr[dateArr.length - 1])
         const updateAtDate = new Date(dateArr[0])
-        const UTCDiff = createAtDate.getHours() - createAtDate.getUTCHours()
-        createAtDate.setHours(createAtDate.getHours() - UTCDiff)
-        updateAtDate.setHours(updateAtDate.getHours() - UTCDiff)
+        createAtDate.setHours(createAtDate.getHours())
+        updateAtDate.setHours(updateAtDate.getHours())
 
         blogPostData.createdat = createAtDate.toISOString()
         blogPostData.updatedat = updateAtDate.toISOString()
